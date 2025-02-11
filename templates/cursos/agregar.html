@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<form method="POST">
+    <label for="codigo">Código del Curso:</label>
+    <input type="text" name="codigo" id="codigo" required class="form-control">
+
+    <label for="nombre">Nombre del Curso:</label>
+    <input type="text" name="nombre" id="nombre" required class="form-control">
+
+    <button type="submit" class="btn btn-primary mt-2">Registrar Curso</button>
+</form>
+
+{% endblock %}

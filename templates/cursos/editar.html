@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Editar Curso</h2>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nuevo Nombre del Curso</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" value="{{ curso[1] }}" required>
+        </div>
+        <button type="submit" class="btn btn-success">Actualizar</button>
+        <a href="{{ url_for('curso.listar_cursos') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Lista de Cursos</h2>
+    <a href="{{ url_for('curso.agregar_curso') }}" class="btn btn-primary">Agregar Curso</a>
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for curso in cursos %}
+            <tr>
+                <td>{{ curso[0] }}</td>
+                <td>{{ curso[1] }}</td>
+                <td>
+                    <a href="{{ url_for('curso.editar_curso', codigo=curso[0]) }}" class="btn btn-warning btn-sm">Editar</a>
+                    <form action="{{ url_for('curso.eliminar_curso', codigo=curso[0]) }}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Agregar Usuario</h2>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="username" class="form-label">Nombre de Usuario</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="mb-3">
+            <label for="rol" class="form-label">Rol</label>
+            <select class="form-control" id="rol" name="rol">
+                <option value="admin">Admin</option>
+                <option value="usuario">Usuario</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <a href="{{ url_for('usuario.listar_usuarios') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
