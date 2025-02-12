@@ -15,3 +15,4 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # Configuración de Flask-Login
 REMEMBER_COOKIE_DURATION = 3600  # 1 hora de duración para la sesión
+

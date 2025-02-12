@@ -11,7 +11,7 @@
             <input type="text" id="curso" name="curso" class="form-control" placeholder="Código - Nombre del curso" list="lista-cursos" required>
             <datalist id="lista-cursos">
                 {% for curso in cursos %}
-                <option value="{{ curso.codigo }} - {{ curso.nombre }}"></option>
+                <option value="{{ curso[0] }} - {{ curso[1] }}"></option>
                 {% endfor %}
             </datalist>
         </div>
