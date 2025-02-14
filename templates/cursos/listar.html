@@ -1,14 +1,18 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Lista de Cursos</h2>
-    <a href="{{ url_for('curso.agregar_curso') }}" class="btn btn-primary">Agregar Curso</a>
-    <table class="table mt-3">
+<div class="container">
+    <h2 class="mt-4">Lista de Programas</h2>
+
+    <!-- Botón para agregar un nuevo curso -->
+    <a href="{{ url_for('curso.crear_curso') }}" class="btn btn-success mb-3">Agregar Programa</a>
+
+    <table class="table table-striped">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>Código</th>
                 <th>Nombre</th>
+                <th>Diploma</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -18,9 +22,19 @@
                 <td>{{ curso[0] }}</td>
                 <td>{{ curso[1] }}</td>
                 <td>
-                    <a href="{{ url_for('curso.editar_curso', codigo=curso[0]) }}" class="btn btn-warning btn-sm">Editar</a>
-                    <form action="{{ url_for('curso.eliminar_curso', codigo=curso[0]) }}" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    {% if curso[2] %}
+                        <a href="{{ url_for('curso.ver_pdf', filename=curso[2].split('/')[-1]) }}" 
+                           class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+                            Ver PDF
+                        </a>
+                    {% else %}
+                        No disponible
+                    {% endif %}
+                </td>              
+                <td>
+                    <a href="{{ url_for('curso.editar_curso', codigo=curso[0]) }}" class="btn btn-warning">Editar</a>
+                    <form action="{{ url_for('curso.eliminar_curso', codigo=curso[0]) }}" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Eliminar</button>
                     </form>
                 </td>
             </tr>

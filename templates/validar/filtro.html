@@ -1,0 +1,103 @@
+<!-- {% extends "layout.html" %}
+
+{% block content %}
+
+    <form method="GET" action="{{ url_for('validar.filtro') }}" style="display: none;">
+        <div class="form-group">
+            <label for="identificacion">Identificación</label>
+            <input type="text" id="identificacion" name="identificacion" class="form-control" value="{{ id_ingresado or '' }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+
+    {% if datos %}
+        <h2 class="mt-4">Filtrar por Código de Curso</h2>
+        <input type="text" id="busquedaCodCurso" class="form-control mb-3" placeholder="Ingrese el Código del Curso">
+
+        <h2>Resultados</h2>
+        <table class="table table-striped" id="tablaResultados">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Identificación</th>
+                    <th>Estado</th>
+                    <th>Incluir Identificación</th>  --> <!-- Nueva columna --> <!--
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in datos %}
+                <tr>
+                    <td>{{ row['nombre'] }}</td>
+                    <td>{{ row['identificacion'] }}</td>
+                    <td>{{ row['estado'] }}</td>
+                    
+                    --> <!-- Checkbox para incluir la identificación --> <!--
+                    <td>
+                        <input type="checkbox" class="chkMostrarId" id="chk_{{ row['identificacion'] }}">
+                    </td>
+
+                    <td>
+                        <button type="button" class="btn btn-success" onclick="generarDiploma('{{ row['identificacion'] }}')">
+                            Generar Diploma
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p id="mensajeNoResultados" class="text-center text-danger" style="display: none;">No se encontraron coincidencias.</p>
+
+    {% else %}
+        <h3 class="text-center mt-4">No se encontraron resultados</h3>
+    {% endif %}
+
+    <script>
+        document.getElementById("busquedaCodCurso").addEventListener("input", function () {
+            let filtro = this.value.toLowerCase().trim();
+            let filas = document.querySelectorAll("#tablaResultados tbody tr");
+            let hayCoincidencias = false;
+
+            filas.forEach(fila => {
+                let contenidoFila = fila.textContent.toLowerCase();
+                if (contenidoFila.includes(filtro)) {
+                    fila.style.display = "";
+                    hayCoincidencias = true;
+                } else {
+                    fila.style.display = "none";
+                }
+            });
+
+            document.getElementById("mensajeNoResultados").style.display = hayCoincidencias ? "none" : "block";
+        });
+
+        function generarDiploma(identificacion) {
+            const safeId = encodeURIComponent(identificacion); // Evitar caracteres peligrosos
+            const checkbox = document.getElementById(chk_${identificacion});
+            const mostrarId = checkbox.checked ? "true" : "false"; // Verificar si el checkbox está marcado
+
+            fetch(/diploma/${safeId}?mostrar_id=${mostrarId})
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => { throw new Error(text || 'Error al generar el diploma'); });
+                    }
+                    return response.blob();
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = diploma_${safeId}.pdf;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                    alert("Error: " + error.message);
+                });
+        }
+    </script>
+
+{% endblock %} -->

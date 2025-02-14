@@ -5,13 +5,13 @@
     <h2 class="mt-4">Importar Datos desde Excel</h2>
 
     <!-- Formulario para subir el archivo -->
-    <form action="{{ url_for('importar.procesar_excel') }}" method="POST" enctype="multipart/form-data" class="mt-3">
+    <form action="{{ url_for('importar.procesar_excel') }}" method="POST" enctype="multipart/form-data" class="mt-3" onsubmit="return confirmarEnvio()">
         <div class="mb-3">
             <label for="curso" class="form-label">Seleccionar Curso</label>
             <input type="text" id="curso" name="curso" class="form-control" placeholder="Código - Nombre del curso" list="lista-cursos" required>
             <datalist id="lista-cursos">
                 {% for curso in cursos %}
-                <option value="{{ curso.codigo }} - {{ curso.nombre }}"></option>
+                <option value="{{ curso[0] }} - {{ curso[1] }}"></option>
                 {% endfor %}
             </datalist>
         </div>
@@ -24,4 +24,12 @@
         <button type="submit" class="btn btn-primary">Subir y Procesar</button>
     </form>
 </div>
+
+<!-- Script de confirmación -->
+<script>
+function confirmarEnvio() {
+    return confirm("¿Está seguro de que desea realizar el cargue de información?");
+}
+</script>
+
 {% endblock %}

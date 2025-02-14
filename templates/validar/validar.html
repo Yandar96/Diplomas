@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>Validar ID</h2>
+
+<form action="{{ url_for('validar.validar_id') }}" method="post">
+    <label for="identificacion">Ingrese el ID:</label>
+    <input type="text" name="identificacion" required>
+    
+    <br><br>
+
+    <!-- CAPTCHA -->
+    <label for="captcha">Ingrese el texto de la imagen CAPTCHA:</label><br>
+    <img id="captcha_image" src="{{ url_for('validar.captcha') }}" alt="CAPTCHA"><br>
+    <button type="button" onclick="recargarCaptcha()">Recargar CAPTCHA</button><br><br>
+    
+    <input type="text" name="captcha_answer" required>
+
+    <br><br>
+
+    <button type="submit">Validar</button>
+</form>
+
+<!-- Mostrar mensajes de error si los hay -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <ul class="flashes">
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+<script>
+    function recargarCaptcha() {
+        var captchaImage = document.getElementById("captcha_image");
+        captchaImage.src = "{{ url_for('validar.captcha') }}?" + new Date().getTime();
+    }
+</script>
+{% endblock %}

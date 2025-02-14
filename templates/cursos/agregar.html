@@ -1,14 +1,26 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<form method="POST">
-    <label for="codigo">Código del Curso:</label>
-    <input type="text" name="codigo" id="codigo" required class="form-control">
+<div class="container">
+    <h2 class="mt-4">Crear Programa</h2>
+    
+    <form action="{{ url_for('curso.crear_curso') }}" method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="codigo" class="form-label">Código</label>
+            <input type="text" class="form-control" id="codigo" name="codigo" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" required>
+        </div>
 
-    <label for="nombre">Nombre del Curso:</label>
-    <input type="text" name="nombre" id="nombre" required class="form-control">
+        <div class="mb-3">
+            <label for="diploma" class="form-label">Diploma (PDF)</label>
+            <input type="file" class="form-control" id="diploma" name="diploma" accept=".pdf">
+        </div>
 
-    <button type="submit" class="btn btn-primary mt-2">Registrar Curso</button>
-</form>
-
+        <button type="submit" class="btn btn-success">Crear Programa</button>
+    </form>
+</div>
 {% endblock %}

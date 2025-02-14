@@ -24,13 +24,7 @@
                             <a class="nav-link" href="{{ url_for('usuario.listar_usuarios') }}">Usuarios</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('personas.ver_diplomas') }}">Ver Diplomas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('diplomas.descargar_diplomas') }}">Descargar Diplomas</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" href="{{ url_for('personas.ver_diplomas') }}">Ver Diplomas</a>
+                          <a class="nav-link" href="{{ url_for('diplomas.ver_diplomas') }}">Ver Diplomas</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('importar.importar_estudiantes') }}">Importar Estudiantes</a>
@@ -39,9 +33,6 @@
                             <a class="nav-link" href="{{ url_for('logout') }}">Cerrar sesión</a>
                         </li>
                     {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('diplomas.descargar_diplomas') }}">Descargar Diplomas</a>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('login') }}">Iniciar sesión</a>
                         </li>
