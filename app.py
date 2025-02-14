@@ -4,9 +4,13 @@ from models.usuario import usuario_bp, get_user_by_id, get_user_by_username, ver
 from models.curso import curso_bp
 from models.diplomas import diplomas_bp  
 from models.importar import importar_bp  
-from models.personas import personas_bp
+from models.persona import personas_bp
 import database
 from werkzeug.security import check_password_hash
+from models.detalle_persona import detalle_persona_bp
+from models.generar_pdf import generar_pdf_bp  # Importa el Blueprint del módulo generar_pdf
+# from models.validar import validar_bp  Importa el Blueprint del módulo validar
+
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -29,6 +33,11 @@ app.register_blueprint(curso_bp, url_prefix='/cursos')
 app.register_blueprint(diplomas_bp, url_prefix='/diplomas')
 app.register_blueprint(importar_bp, url_prefix='/importar')  
 app.register_blueprint(personas_bp, url_prefix='/personas')
+app.register_blueprint(detalle_persona_bp, url_prefix='/detalle_persona')
+app.register_blueprint(generar_pdf_bp,url_prefix='/generar_pdf')
+# app.register_blueprint(validar_bp, url_prefix='/validar')
+
+
 
 class Usuario(UserMixin):
     def __init__(self, id, username, password, rol):

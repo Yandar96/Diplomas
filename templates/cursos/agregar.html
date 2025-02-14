@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container">
-    <h2 class="mt-4">Crear Curso</h2>
+    <h2 class="mt-4">Crear Programa</h2>
     
     <form action="{{ url_for('curso.crear_curso') }}" method="POST" enctype="multipart/form-data">
         <div class="mb-3">
@@ -20,7 +20,7 @@
             <input type="file" class="form-control" id="diploma" name="diploma" accept=".pdf">
         </div>
 
-        <button type="submit" class="btn btn-success">Crear Curso</button>
+        <button type="submit" class="btn btn-success">Crear Programa</button>
     </form>
 </div>
 {% endblock %}
