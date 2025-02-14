@@ -12,7 +12,20 @@ if not os.path.exists(UPLOAD_FOLDER):
 ALLOWED_EXTENSIONS = {'pdf'}
 
 def allowed_file(filename):
+    """ Verifica si el archivo tiene una extensión permitida (PDF) """
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def get_unique_filename(directory, filename):
+    """ Genera un nombre de archivo único si ya existe uno con el mismo nombre """
+    base, ext = os.path.splitext(filename)
+    counter = 1
+    new_filename = filename
+
+    while os.path.exists(os.path.join(directory, new_filename)):
+        new_filename = f"{base}({counter}){ext}"
+        counter += 1
+
+    return new_filename
 
 @curso_bp.route('/cursos', methods=['GET'])
 def listar_cursos():
@@ -32,8 +45,8 @@ def crear_curso():
         ruta_pdf = ""
         if archivo and allowed_file(archivo.filename):
             filename = secure_filename(archivo.filename)
-            ruta_pdf = os.path.join(UPLOAD_FOLDER, filename)
-            archivo.save(ruta_pdf)
+            filename = get_unique_filename(UPLOAD_FOLDER, filename)  # Asegurar que no se sobrescriba
+            archivo.save(os.path.join(UPLOAD_FOLDER, filename))
             ruta_pdf = f"pdf/{filename}"  # Guardamos solo la ruta relativa
 
         conn = database.get_db()
@@ -50,17 +63,36 @@ def editar_curso(codigo):
     conn = database.get_db()
     cursor = conn.cursor()
 
+    # Obtener el curso actual para conocer su PDF actual
+    cursor.execute("SELECT diploma FROM curso WHERE codigo = %s", (codigo,))
+    curso_actual = cursor.fetchone()
+    ruta_pdf_anterior = curso_actual[0] if curso_actual else None
+
     if request.method == 'POST':
         nombre = request.form['nombre']
         archivo = request.files['diploma']
-        ruta_pdf = request.form['ruta_actual']  # Mantener el archivo anterior si no se sube uno nuevo
+        ruta_pdf = ruta_pdf_anterior  # Mantener el archivo anterior si no se sube uno nuevo
 
         if archivo and allowed_file(archivo.filename):
             filename = secure_filename(archivo.filename)
             ruta_pdf = os.path.join(UPLOAD_FOLDER, filename)
+
+            # Si el archivo ya existe, agregar un número al final para evitar conflictos
+            contador = 1
+            base, extension = os.path.splitext(filename)
+            while os.path.exists(ruta_pdf):
+                filename = f"{base}_{contador}{extension}"
+                ruta_pdf = os.path.join(UPLOAD_FOLDER, filename)
+                contador += 1
+
             archivo.save(ruta_pdf)
             ruta_pdf = f"pdf/{filename}"
 
+            # Eliminar el PDF anterior si existía
+            if ruta_pdf_anterior and os.path.exists(os.path.join("static", ruta_pdf_anterior)):
+                os.remove(os.path.join("static", ruta_pdf_anterior))
+
+        # Actualizar la base de datos con el nuevo PDF
         cursor.execute("UPDATE curso SET nombre = %s, diploma = %s WHERE codigo = %s", (nombre, ruta_pdf, codigo))
         conn.commit()
         flash('Curso actualizado con éxito', 'success')

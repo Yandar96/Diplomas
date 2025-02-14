@@ -5,7 +5,7 @@
 
 <!-- Barra de búsqueda -->
 <div class="input-group mb-3">
-    <input type="text" id="search" class="form-control" placeholder="🔎 Buscar por nombre o matrícula...">
+    <input type="text" id="search" class="form-control" placeholder="🔎 Buscar por nombre o programa...">
 </div>
 
 <!-- Tabla de diplomas con nuevo diseño -->
@@ -15,24 +15,26 @@
             <tr>
                 <th>Código</th>
                 <th>Nombre Completo</th>
-                <th>Matrícula</th>
-                <th>Curso</th>
+                <th>Programa</th>
                 <th>Funciones</th>
             </tr>
         </thead>
         <tbody id="tableBody" class="table-light">
             {% for diploma in diplomas %}
             <tr>
-                <td>{{ diploma.codigo }}</td>
-                <td class="fw-bold">{{ diploma.nombreCompleto }}</td>
-                <td>{{ diploma.matricula }}</td>
-                <td>{{ diploma.curso }}</td>
+                <td>{{ diploma[0] }}</td>
+                <td class="fw-bold">{{ diploma[1] }}</td>
+                <td>{{ diploma[2] }}</td>
                 <td>
-                    <button class="btn btn-sm btn-info"><i class="fas fa-eye"></i> Ver</button>
+                    <a href="{{ url_for('generar_pdf.generar_pdf', codDetalle=diploma[0]) }}" 
+                        class="btn btn-sm btn-info">
+                        <i class="fas fa-eye"></i> Ver
+                    </a>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
+        
     </table>
 </div>
 

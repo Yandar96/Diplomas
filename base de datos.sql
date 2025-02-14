@@ -4,7 +4,6 @@ use diplomas;
 create table persona(
 identificacion int primary key,
 nombreCompleto varchar(100),
-matricula varchar(10),
 pago varchar(10) 
 );
 

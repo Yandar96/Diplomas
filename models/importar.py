@@ -3,6 +3,8 @@ import pandas as pd
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from werkzeug.utils import secure_filename
 import database
+from models.persona import insertar_persona
+from models.detalle_persona import insertar_detalle_persona
 
 importar_bp = Blueprint('importar', __name__, template_folder='templates')
 
@@ -16,7 +18,6 @@ def importar_estudiantes():
     cursor = conn.cursor()
     cursor.execute("SELECT codigo, nombre FROM curso")
     cursos = cursor.fetchall()
-    cursos = [(curso[0], curso[1]) for curso in cursos]  # Asegurar estructura correcta
     return render_template('diplomas/importar.html', cursos=cursos)
 
 @importar_bp.route('/procesar_excel', methods=['POST'])
@@ -26,7 +27,7 @@ def procesar_excel():
         return redirect(url_for('importar.importar_estudiantes'))
 
     archivo = request.files['archivo']
-    curso_seleccionado = request.form['curso']
+    curso_seleccionado = request.form['curso'].split(" - ")[0]  # Extraer solo el código del curso
 
     if archivo.filename == '':
         flash('No se seleccionó ningún archivo', 'danger')
@@ -56,19 +57,28 @@ def procesar_excel():
 
         # Seleccionar solo las columnas 0, 5 y 11
         try:
-            df_final = df_filtrado.iloc[:, [0, 5, 11]]
+            df_final = df_filtrado.iloc[:, [0, 5, 11]]  # Asegúrate de seleccionar bien las columnas
+            df_final.columns = [ 'nombreCompleto','identificacion', 'pago']  # Orden correcto
+            df_final['identificacion'] = df_final['identificacion'].astype(str).str.strip()  # Asegurar que sean strings limpios
+            df_final['pago'] = df_final['pago'].astype(str).str.strip()
+
         except IndexError:
             flash("Error: El archivo no tiene suficientes columnas.", "danger")
             return redirect(url_for('importar.importar_estudiantes'))
 
-        # Guardar en CSV dentro del proyecto (sobrescribiendo si ya existe)
-        csv_path = os.path.join(UPLOAD_FOLDER, "datos_filtrados.csv")
-        if os.path.exists(csv_path):
-            os.remove(csv_path)
+        conn = database.get_db()
+        cursor = conn.cursor()
 
-        df_final.to_csv(csv_path, index=False, header=False, encoding='utf-8-sig')
+        # Insertar datos en la tabla persona
+        for index, row in df_final.iterrows():
+            insertar_persona(cursor, row['identificacion'], row['nombreCompleto'], row['pago'])
 
-        flash('El archivo ha sido procesado y guardado automáticamente en la carpeta "uploads".', 'success')
+        # Insertar datos en la tabla detallePersona
+        for index, row in df_final.iterrows():
+            insertar_detalle_persona(cursor, row['identificacion'], curso_seleccionado)
+
+        conn.commit()
+        flash('Los datos han sido importados con éxito.', 'success')
         return redirect(url_for('importar.importar_estudiantes'))
 
     except Exception as e:
