@@ -34,7 +34,6 @@
                 <td>
                     <a href="{{ url_for('curso.editar_curso', codigo=curso[0]) }}" class="btn btn-warning">Editar</a>
                     <form action="{{ url_for('curso.eliminar_curso', codigo=curso[0]) }}" method="POST" style="display:inline;">
-                        <button type="submit" class="btn btn-danger">Eliminar</button>
                     </form>
                 </td>
             </tr>
